@@ -1,5 +1,7 @@
 package com.egaranhani.batalhanaval;
 
+import com.egaranhani.batalhanaval.exceptions.OutOfBoundsException;
+
 /**
  * Created by egaranhani on 24/05/2015.
  */
@@ -11,44 +13,89 @@ public class Board {
         VERTICAL
     }
 
+    public enum STATUS {
+        BLANK,
+        SHIP,
+        SPLASH,
+        HIT
+    }
+
     public static final int BOARD_SIZE = 10;
-    public static final String BLANK = "BLANK";
-    public static final String SHIP = "SHIP";
 
     public Board() {
         initializeBoard();
     }
 
-    public String get(int lin, int col) {
+    public STATUS get(int lin, int col) {
         return board[lin][col];
     }
 
     public boolean putShip(int size, int line, int column, DIRECTION direction){
-        if(direction == DIRECTION.HORIZONTAL) {
-            if(size+column > BOARD_SIZE)
+        validateBoardPosition(line,column);
+        if(direction.equals(DIRECTION.HORIZONTAL)) {
+            if (!validateShipOnBoard(size, column) || !validateShipNotOnOtherShip(line, column, size, direction))
                 return false;
             for (int i = column; i < column+size; i++) {
-                board[line][i] = SHIP;
+                board[line][i] = STATUS.SHIP;
             }
         } else {
-            if(size+line > BOARD_SIZE)
+            if (!validateShipOnBoard(size, line)  || !validateShipNotOnOtherShip(line, column, size, direction))
                 return false;
             for (int i = line; i < line+size; i++) {
-                board[i][column] = SHIP;
+                board[i][column] = STATUS.SHIP;
             }
         }
         return true;
     }
 
+    public STATUS shoot(int line, int column){
+        validateBoardPosition(line, column);
+        STATUS status = board[line][column];
+        if(status.equals(STATUS.BLANK))
+            board[line][column] = STATUS.SPLASH;
+        if(status.equals(STATUS.SHIP))
+            board[line][column] = STATUS.HIT;
+        return board[line][column];
+    }
+
+    private void validateBoardPosition(int line, int column) {
+        if(line < 0 || line >= BOARD_SIZE || column < 0 || column >= BOARD_SIZE)
+            throw new OutOfBoundsException(line, column);
+    }
+
+    public STATUS[][] board(){
+        return board.clone();
+    }
+
+    private boolean validateShipOnBoard(int size, int position) {
+        if(size+position > BOARD_SIZE)
+            return false;
+        return true;
+    }
+
+    private boolean validateShipNotOnOtherShip(int line, int column, int shipSize, DIRECTION dir){
+        if(dir.equals(DIRECTION.HORIZONTAL)){
+            for (int i = column; i < column+shipSize; i++) {
+                if(board[line][i] != STATUS.BLANK)
+                    return false;
+            }
+        } else {
+            for (int i = line; i < line+shipSize; i++) {
+                if (board[i][column] != STATUS.BLANK)
+                    return false;
+            }
+        }
+        return true;
+    }
 
     private void initializeBoard() {
-        board = new String[BOARD_SIZE][BOARD_SIZE];
+        board = new STATUS[BOARD_SIZE][BOARD_SIZE];
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                board[i][j] = BLANK;
+                board[i][j] = STATUS.BLANK;
             }
         }
     }
 
-    private String [][] board;
+    private STATUS [][] board;
 }
