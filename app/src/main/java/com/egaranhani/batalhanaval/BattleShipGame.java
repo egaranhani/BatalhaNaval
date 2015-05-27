@@ -1,13 +1,24 @@
 package com.egaranhani.batalhanaval;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by egaranhani on 25/05/2015.
  */
 public class BattleShipGame {
-    private enum PLAYERS{
-        PLAYER1,
-        PLAYER2
+    public BattleShipGame(){
+        BattleShipGameSetup setup = new BattleShipGameSetup();
+        myBoard = setup.defaultSetup();
+        oponentBoard = new Board();
     }
-    private PLAYERS turn = PLAYERS.PLAYER1;
+    Board myBoard;
+    Board oponentBoard;
 
+    public void response(ShootAttempt attempt) {
+        if(attempt.result == null)
+            return;
+
+        oponentBoard.markAs(attempt.position[0], attempt.position[1], attempt.result);
+    }
 }

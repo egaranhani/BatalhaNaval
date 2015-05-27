@@ -3,7 +3,7 @@ package com.egaranhani.batalhanaval;
 /**
  * Created by egaranhani on 26/05/2015.
  */
-public class SplashedSpace implements BoardSpace {
+public class SplashedWater implements BoardSpace {
     @Override
     public BoardSpace shoot() {
         return this;

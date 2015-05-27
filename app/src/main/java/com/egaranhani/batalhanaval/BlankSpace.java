@@ -7,7 +7,7 @@ public class BlankSpace implements BoardSpace {
 
     @Override
     public BoardSpace shoot() {
-        return new SplashedSpace();
+        return new SplashedWater();
     }
 
     @Override

@@ -2,6 +2,9 @@ package com.egaranhani.batalhanaval;
 
 import com.egaranhani.batalhanaval.exceptions.OutOfBoundsException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by egaranhani on 24/05/2015.
  */
@@ -16,6 +19,7 @@ public class Board {
     public static final int BOARD_SIZE = 10;
 
     public Board() {
+        battleShips = new ArrayList<>();
         initializeBoard();
     }
 
@@ -39,6 +43,14 @@ public class Board {
                 board[i][column] = battleShip.getCompartment(i-line);
             }
         }
+        battleShips.add(battleShip);
+        return true;
+    }
+
+    public boolean allBattleshipsDestroyed(){
+        for (BattleShip b : battleShips)
+            if(!b.isDestroyed())
+                return false;
         return true;
     }
 
@@ -54,6 +66,13 @@ public class Board {
 
     public BoardSpace[][] board(){
         return board.clone();
+    }
+
+    public void markAs(int line, int column, BoardSpace.STATUS attemptResult) {
+        if(attemptResult == BoardSpace.STATUS.HIT)
+            board[line][column] = new ShipCompartment().shoot();
+        else
+            board[line][column] = new SplashedWater();
     }
 
     private boolean validateShipOnBoard(int size, int position) {
@@ -87,5 +106,6 @@ public class Board {
         }
     }
 
+    private List<BattleShip> battleShips;
     private BoardSpace [][] board;
 }

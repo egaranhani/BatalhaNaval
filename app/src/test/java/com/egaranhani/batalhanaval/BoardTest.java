@@ -324,6 +324,48 @@ public class BoardTest extends TestCase {
         validateBoard(b.board(), expectedBoard);
     }
 
+    public void testShootUntilAllShipsDestroyed(){
+        Board b = new Board();
+        BattleShip battleShip1 = new BattleShip(2);
+        BattleShip battleShip2 = new BattleShip(2);
+        assertTrue(b.putShip(battleShip1, 0, 0, DIRECTION.VERTICAL));
+        assertTrue(b.putShip(battleShip2, 2, 0, DIRECTION.VERTICAL));
+
+        assertEquals(b.shoot(0, 0).status(), BoardSpace.STATUS.HIT);
+        assertFalse(battleShip1.isDestroyed());
+        assertFalse(battleShip2.isDestroyed());
+        assertFalse(b.allBattleshipsDestroyed());
+
+        assertEquals(b.shoot(1, 0).status(), BoardSpace.STATUS.HIT);
+        assertTrue(battleShip1.isDestroyed());
+        assertFalse(battleShip2.isDestroyed());
+        assertFalse(b.allBattleshipsDestroyed());
+
+        assertEquals(b.shoot(2, 0).status(), BoardSpace.STATUS.HIT);
+        assertTrue(battleShip1.isDestroyed());
+        assertFalse(battleShip2.isDestroyed());
+        assertFalse(b.allBattleshipsDestroyed());
+
+        assertEquals(b.shoot(3, 0).status(), BoardSpace.STATUS.HIT);
+        assertTrue(battleShip1.isDestroyed());
+        assertTrue(battleShip2.isDestroyed());
+        assertTrue(b.allBattleshipsDestroyed());
+
+        String expectedBoard[][] = new String[][]
+                {   {"HIT",   "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
+                    {"HIT",   "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
+                    {"HIT",   "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
+                    {"HIT",   "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
+                    {"BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
+                    {"BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
+                    {"BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
+                    {"BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
+                    {"BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
+                    {"BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"}
+                };
+        validateBoard(b.board(), expectedBoard);
+    }
+
     private void validateBoard(BoardSpace[][] board, String[][] expectedBoard) {
         for (int i = 0; i < Board.BOARD_SIZE; i++) {
             for (int j = 0; j < Board.BOARD_SIZE; j++) {

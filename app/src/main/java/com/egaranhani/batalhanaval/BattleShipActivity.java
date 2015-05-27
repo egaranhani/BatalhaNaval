@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import sneer.android.Message;
+import sneer.android.PartnerSession;
 
 public class BattleShipActivity extends ActionBarActivity {
 
@@ -12,6 +14,8 @@ public class BattleShipActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_battle_ship);
+        gameEngine = new BattleShipGame();
+        startSession();
     }
 
     @Override
@@ -35,4 +39,38 @@ public class BattleShipActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void startSession() {
+        session = PartnerSession.join(this, new PartnerSession.Listener() {
+            @Override
+            public void onUpToDate() {
+                refresh();
+            }
+
+            @Override
+            public void onMessage(Message message) {
+                handle(message);
+            }
+        });
+    }
+
+
+
+    private void refresh() {
+
+    }
+
+    private void handle(Message message) {
+        ShootAttempt attempt = (ShootAttempt) message.payload();
+        if(waitingForOpponentMove)
+            return;
+
+        gameEngine.response(attempt);
+        //TODO: redraw opponent board
+    }
+
+    private BattleShipGame gameEngine;
+    private PartnerSession session;
+    private boolean waitingForOpponentMove;
+
 }
