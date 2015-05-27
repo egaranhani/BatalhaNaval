@@ -1,6 +1,5 @@
 package com.egaranhani.batalhanaval;
 
-import com.egaranhani.batalhanaval.Board;
 import com.egaranhani.batalhanaval.Board.DIRECTION;
 import com.egaranhani.batalhanaval.exceptions.OutOfBoundsException;
 
@@ -27,7 +26,8 @@ public class BoardTest extends TestCase {
 
     public void testPutOneShipSize2HorizontalAtBeginOfBoard() {
         Board b = new Board();
-        assertTrue(b.putShip(2, 0, 0, DIRECTION.HORIZONTAL));
+        BattleShip battleShip = new BattleShip(2);
+        assertTrue(b.putShip(battleShip, 0, 0, DIRECTION.HORIZONTAL));
 
         String expectedBoard[][] = new String[][]
             {   {"SHIP",  "SHIP",  "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
@@ -47,7 +47,8 @@ public class BoardTest extends TestCase {
     public void testPutOneShipSize2HorizontalAtEndOfBoard() {
         Board b = new Board();
         int lineInsert = Board.BOARD_SIZE - 1;
-        assertTrue(b.putShip(2, lineInsert, 8, DIRECTION.HORIZONTAL));
+        BattleShip battleShip = new BattleShip(2);
+        assertTrue(b.putShip(battleShip, lineInsert, 8, DIRECTION.HORIZONTAL));
 
         String expectedBoard[][] = new String[][]
                 {   {"BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
@@ -66,7 +67,8 @@ public class BoardTest extends TestCase {
 
     public void testPutOneShipSize2VerticalAtBeginOfBoard() {
         Board b = new Board();
-        assertTrue(b.putShip(2, 0, 0, DIRECTION.VERTICAL));
+        BattleShip battleShip = new BattleShip(2);
+        assertTrue(b.putShip(battleShip, 0, 0, DIRECTION.VERTICAL));
 
         String expectedBoard[][] = new String[][]
                 {   {"SHIP",  "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
@@ -86,7 +88,8 @@ public class BoardTest extends TestCase {
     public void testPutOneShipSize2VerticalAtEndOfBoard() {
         Board b = new Board();
         int columnInsert = Board.BOARD_SIZE-1;
-        assertTrue(b.putShip(2, 8, columnInsert, DIRECTION.VERTICAL));
+        BattleShip battleShip = new BattleShip(2);
+        assertTrue(b.putShip(battleShip, 8, columnInsert, DIRECTION.VERTICAL));
 
         String expectedBoard[][] = new String[][]
                 {   {"BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
@@ -105,8 +108,10 @@ public class BoardTest extends TestCase {
 
     public void testPutShipOverAnotherShipHorizontal(){
         Board b = new Board();
-        assertTrue(b.putShip(2, 0, 0, DIRECTION.HORIZONTAL));
-        assertFalse(b.putShip(2, 0, 0, DIRECTION.HORIZONTAL));
+        BattleShip battleShip1 = new BattleShip(2);
+        BattleShip battleShip2 = new BattleShip(2);
+        assertTrue(b.putShip(battleShip1, 0, 0, DIRECTION.HORIZONTAL));
+        assertFalse(b.putShip(battleShip2, 0, 0, DIRECTION.HORIZONTAL));
 
         String expectedBoard[][] = new String[][]
                 {   {"SHIP",  "SHIP",  "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
@@ -125,8 +130,10 @@ public class BoardTest extends TestCase {
 
     public void testPutShipOverTailOfAnotherShipHorizontal(){
         Board b = new Board();
-        assertTrue(b.putShip(2, 0, 0, DIRECTION.HORIZONTAL));
-        assertFalse(b.putShip(2, 0, 1, DIRECTION.HORIZONTAL));
+        BattleShip battleShip1 = new BattleShip(2);
+        BattleShip battleShip2 = new BattleShip(2);
+        assertTrue(b.putShip(battleShip1, 0, 0, DIRECTION.HORIZONTAL));
+        assertFalse(b.putShip(battleShip2, 0, 1, DIRECTION.HORIZONTAL));
 
         String expectedBoard[][] = new String[][]
                 {   {"SHIP",  "SHIP",  "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
@@ -145,8 +152,10 @@ public class BoardTest extends TestCase {
 
     public void testPutShipOverAnotherShipVertical(){
         Board b = new Board();
-        assertTrue(b.putShip(2, 0, 0, DIRECTION.VERTICAL));
-        assertFalse(b.putShip(2, 0, 0, DIRECTION.VERTICAL));
+        BattleShip battleShip1 = new BattleShip(2);
+        BattleShip battleShip2 = new BattleShip(2);
+        assertTrue(b.putShip(battleShip1, 0, 0, DIRECTION.VERTICAL));
+        assertFalse(b.putShip(battleShip2, 0, 0, DIRECTION.VERTICAL));
 
         String expectedBoard[][] = new String[][]
                 {   {"SHIP",  "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
@@ -165,8 +174,10 @@ public class BoardTest extends TestCase {
 
     public void testPutShipOverTailOfAnotherShipVertical(){
         Board b = new Board();
-        assertTrue(b.putShip(2, 0, 0, DIRECTION.VERTICAL));
-        assertFalse(b.putShip(2, 1, 0, DIRECTION.VERTICAL));
+        BattleShip battleShip1 = new BattleShip(2);
+        BattleShip battleShip2 = new BattleShip(2);
+        assertTrue(b.putShip(battleShip1, 0, 0, DIRECTION.VERTICAL));
+        assertFalse(b.putShip(battleShip2, 1, 0, DIRECTION.VERTICAL));
 
         String expectedBoard[][] = new String[][]
                 {   {"SHIP",  "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
@@ -185,8 +196,10 @@ public class BoardTest extends TestCase {
 
     public void testPutShipNextToAnotherShipHorizontal(){
         Board b = new Board();
-        assertTrue(b.putShip(2, 0, 0, DIRECTION.HORIZONTAL));
-        assertTrue(b.putShip(2, 0, 2, DIRECTION.HORIZONTAL));
+        BattleShip battleShip1 = new BattleShip(2);
+        BattleShip battleShip2 = new BattleShip(2);
+        assertTrue(b.putShip(battleShip1, 0, 0, DIRECTION.HORIZONTAL));
+        assertTrue(b.putShip(battleShip2, 0, 2, DIRECTION.HORIZONTAL));
 
         String expectedBoard[][] = new String[][]
                 {   {"SHIP",  "SHIP",  "SHIP",  "SHIP",  "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
@@ -205,8 +218,10 @@ public class BoardTest extends TestCase {
 
     public void testPutShipNextToAnotherShipVertical(){
         Board b = new Board();
-        assertTrue(b.putShip(2, 0, 0, DIRECTION.VERTICAL));
-        assertTrue(b.putShip(2, 2, 0, DIRECTION.VERTICAL));
+        BattleShip battleShip1 = new BattleShip(2);
+        BattleShip battleShip2 = new BattleShip(2);
+        assertTrue(b.putShip(battleShip1, 0, 0, DIRECTION.VERTICAL));
+        assertTrue(b.putShip(battleShip2, 2, 0, DIRECTION.VERTICAL));
 
         String expectedBoard[][] = new String[][]
                 {   {"SHIP",  "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
@@ -269,8 +284,8 @@ public class BoardTest extends TestCase {
 
     public void testShootOnWater(){
         Board b = new Board();
-        assertEquals(b.get(0,0), Board.STATUS.BLANK);
-        assertEquals(b.shoot(0, 0), Board.STATUS.SPLASH);
+        assertEquals(b.get(0,0).status(), BoardSpace.STATUS.BLANK);
+        assertEquals(b.shoot(0,0).status(), BoardSpace.STATUS.SPLASH);
 
         String expectedBoard[][] = new String[][]
                 {   {"SPLASH","BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
@@ -289,12 +304,13 @@ public class BoardTest extends TestCase {
 
     public void testShootOnShip(){
         Board b = new Board();
-        b.putShip(2, 0, 0, DIRECTION.HORIZONTAL);
-        assertEquals(b.get(0, 0), Board.STATUS.SHIP);
-        assertEquals(b.shoot(0, 0), Board.STATUS.HIT);
+        BattleShip battleShip = new BattleShip(2);
+        b.putShip(battleShip, 0, 0, DIRECTION.HORIZONTAL);
+        assertEquals(b.get(0,0).status(), BoardSpace.STATUS.SHIP);
+        assertEquals(b.shoot(0,0).status(), BoardSpace.STATUS.HIT);
 
         String expectedBoard[][] = new String[][]
-                {   {"HIT",   "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
+                {   {"HIT",   "SHIP",  "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
                     {"BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
                     {"BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
                     {"BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK", "BLANK"},
@@ -308,17 +324,18 @@ public class BoardTest extends TestCase {
         validateBoard(b.board(), expectedBoard);
     }
 
-    private void validateBoard(Board.STATUS[][] board, String[][] expectedBoard) {
+    private void validateBoard(BoardSpace[][] board, String[][] expectedBoard) {
         for (int i = 0; i < Board.BOARD_SIZE; i++) {
             for (int j = 0; j < Board.BOARD_SIZE; j++) {
-                assertEquals(expectedBoard[i][j], board[i][j].name());
+                assertEquals(expectedBoard[i][j], board[i][j].status().name());
             }
         }
     }
 
     private void validatePutShipOutOfBoundsException(Board b, int line, int column){
         try {
-            b.putShip(2, line, column, DIRECTION.HORIZONTAL);
+            BattleShip battleShip = new BattleShip(2);
+            b.putShip(battleShip, line, column, DIRECTION.HORIZONTAL);
         } catch (OutOfBoundsException e){
             assertEquals(e.getMessage(), "Position on board [10][10] is out of bounds: [" + line + "][" + column + "]");
         }

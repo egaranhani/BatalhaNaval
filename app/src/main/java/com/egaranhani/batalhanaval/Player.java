@@ -7,18 +7,28 @@ import java.util.List;
  * Created by egaranhani on 26/05/2015.
  */
 public class Player {
-    Board board;
-    List<BattleShip> ships;
-    InitialState init = new InitialState();
+    private Board board;
+    private String name;
+    private List<BattleShip> ships;
+    private InitialState init = new InitialState();
 
-    public Player(){
+    public Player(String playerName){
+        name = new String(playerName);
     }
 
-    public Board setupBoard(){
+    public Board setupInitialTestBoard(){
         //TODO: o barcos serão passados pelo jogo
         board = new Board();
         ships = init.createBoats();
         return init.setDefaultBoard();
+    }
+
+    public boolean putShipOnBoard(BattleShip ship, int line, int column, Board.DIRECTION direction){
+        return board.putShip(ship, line, column, direction);
+    }
+
+    public String name() {
+        return name;
     }
 
     private class InitialState{
@@ -53,7 +63,7 @@ public class Player {
         private Board setDefaultBoard() {
             for (int i = 0; i < ships.size(); i++) {
                 BattleShip ship = ships.get(i);
-                board.putShip(ship.size(), getInitialDefaultLine(i), getInitialDefaultColumn(i), getInitialDefaultDirection(i));
+                board.putShip(ship, getInitialDefaultLine(i), getInitialDefaultColumn(i), getInitialDefaultDirection(i));
             }
             return board;
         }

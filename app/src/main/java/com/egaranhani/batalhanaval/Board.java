@@ -13,49 +13,38 @@ public class Board {
         VERTICAL
     }
 
-    public enum STATUS {
-        BLANK,
-        SHIP,
-        SPLASH,
-        HIT
-    }
-
     public static final int BOARD_SIZE = 10;
 
     public Board() {
         initializeBoard();
     }
 
-    public STATUS get(int lin, int col) {
+    public BoardSpace get(int lin, int col) {
         return board[lin][col];
     }
 
-    public boolean putShip(int size, int line, int column, DIRECTION direction){
+    public boolean putShip(BattleShip battleShip, int line, int column, DIRECTION direction){
         validateBoardPosition(line,column);
+        int shipSize = battleShip.size();
         if(direction.equals(DIRECTION.HORIZONTAL)) {
-            if (!validateShipOnBoard(size, column) || !validateShipNotOnOtherShip(line, column, size, direction))
+            if (!validateShipOnBoard(shipSize, column) || !validateShipNotOnOtherShip(line, column, shipSize, direction))
                 return false;
-            for (int i = column; i < column+size; i++) {
-                board[line][i] = STATUS.SHIP;
+            for (int i = column; i < column+shipSize; i++) {
+                board[line][i] = battleShip.getCompartment(i-column);
             }
         } else {
-            if (!validateShipOnBoard(size, line)  || !validateShipNotOnOtherShip(line, column, size, direction))
+            if (!validateShipOnBoard(shipSize, line)  || !validateShipNotOnOtherShip(line, column, shipSize, direction))
                 return false;
-            for (int i = line; i < line+size; i++) {
-                board[i][column] = STATUS.SHIP;
+            for (int i = line; i < line+shipSize; i++) {
+                board[i][column] = battleShip.getCompartment(i-line);
             }
         }
         return true;
     }
 
-    public STATUS shoot(int line, int column){
+    public BoardSpace shoot(int line, int column){
         validateBoardPosition(line, column);
-        STATUS status = board[line][column];
-        if(status.equals(STATUS.BLANK))
-            board[line][column] = STATUS.SPLASH;
-        if(status.equals(STATUS.SHIP))
-            board[line][column] = STATUS.HIT;
-        return board[line][column];
+        return board[line][column] = board[line][column].shoot();
     }
 
     private void validateBoardPosition(int line, int column) {
@@ -63,7 +52,7 @@ public class Board {
             throw new OutOfBoundsException(line, column);
     }
 
-    public STATUS[][] board(){
+    public BoardSpace[][] board(){
         return board.clone();
     }
 
@@ -76,12 +65,12 @@ public class Board {
     private boolean validateShipNotOnOtherShip(int line, int column, int shipSize, DIRECTION dir){
         if(dir.equals(DIRECTION.HORIZONTAL)){
             for (int i = column; i < column+shipSize; i++) {
-                if(board[line][i] != STATUS.BLANK)
+                if(board[line][i].status() != BoardSpace.STATUS.BLANK)
                     return false;
             }
         } else {
             for (int i = line; i < line+shipSize; i++) {
-                if (board[i][column] != STATUS.BLANK)
+                if (board[i][column].status() != BoardSpace.STATUS.BLANK)
                     return false;
             }
         }
@@ -89,13 +78,14 @@ public class Board {
     }
 
     private void initializeBoard() {
-        board = new STATUS[BOARD_SIZE][BOARD_SIZE];
+        board = new BoardSpace[BOARD_SIZE][BOARD_SIZE];
+        BlankSpace blankSpace = new BlankSpace();
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                board[i][j] = STATUS.BLANK;
+                board[i][j] = blankSpace;
             }
         }
     }
 
-    private STATUS [][] board;
+    private BoardSpace [][] board;
 }
