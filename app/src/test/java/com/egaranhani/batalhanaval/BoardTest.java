@@ -1,4 +1,4 @@
-package com.garanhani.batalhanaval.test;
+package com.egaranhani.batalhanaval;
 
 import com.egaranhani.batalhanaval.Board;
 import com.egaranhani.batalhanaval.Board.DIRECTION;
