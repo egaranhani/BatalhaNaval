@@ -54,17 +54,18 @@ public class BattleShipActivity extends ActionBarActivity {
         });
     }
 
-
-
     private void refresh() {
 
     }
 
     private void handle(Message message) {
-        ShootAttempt attempt = (ShootAttempt) message.payload();
+        if(message.wasSentByMe())
+            return;
+
         if(waitingForOpponentMove)
             return;
 
+        ShootAttempt attempt = (ShootAttempt) message.payload();
         gameEngine.response(attempt);
         //TODO: redraw opponent board
     }

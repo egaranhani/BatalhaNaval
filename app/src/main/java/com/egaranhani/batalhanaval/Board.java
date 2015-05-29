@@ -59,16 +59,24 @@ public class Board {
         return board[line][column] = board[line][column].shoot();
     }
 
+    public BoardSpace[][] board(){
+        return board.clone();
+    }
+
+    public void setHit(int line, int column){
+        mark(line, column, BoardSpace.STATUS.HIT);
+    }
+
+    public void setSplash(int line, int column){
+        mark(line, column, BoardSpace.STATUS.SPLASH);
+    }
+
     private void validateBoardPosition(int line, int column) {
         if(line < 0 || line >= BOARD_SIZE || column < 0 || column >= BOARD_SIZE)
             throw new OutOfBoundsException(line, column);
     }
 
-    public BoardSpace[][] board(){
-        return board.clone();
-    }
-
-    public void markAs(int line, int column, BoardSpace.STATUS attemptResult) {
+    private void mark(int line, int column, BoardSpace.STATUS attemptResult) {
         if(attemptResult == BoardSpace.STATUS.HIT)
             board[line][column] = new ShipCompartment().shoot();
         else
