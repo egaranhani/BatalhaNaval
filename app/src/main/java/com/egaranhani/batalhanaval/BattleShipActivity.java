@@ -1,9 +1,14 @@
 package com.egaranhani.batalhanaval;
 
+import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.GridLayout;
 
 import sneer.android.Message;
 import sneer.android.PartnerSession;
@@ -13,8 +18,39 @@ public class BattleShipActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_battle_ship);
         gameEngine = new BattleShipGame();
+
+        int length = gameEngine.boardSize();
+        buttons = new Button[length][length];
+
+        setContentView(R.layout.activity_battle_ship);
+        GridLayout layout = (GridLayout)findViewById(R.id.gridLayout);
+
+        int id = 0;
+        for (int i = 0; i < length; i++) {
+            for (int j = 0; j < length; j++) {
+                final Button b = new Button(this);
+                b.setId(id++);
+                b.setText("");
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        this.onClick(b);
+                    }
+                });
+
+                if(gameEngine.myBoard().board()[i][j].equals(BoardSpace.STATUS.BLANK))
+                    b.setBackgroundColor(Color.WHITE);
+                else
+                    b.setBackgroundColor(Color.BLUE);
+                buttons[i][j] = b;
+            }
+        }
+
+        Button myButton = new Button(this);
+        myButton.setText("Push Me");
+
+        layout.addView(myButton);
         startSession();
     }
 
@@ -70,8 +106,13 @@ public class BattleShipActivity extends ActionBarActivity {
         //TODO: redraw opponent board
     }
 
+    protected void onClick(View v){
+        int buttonId = v.getId();
+    }
+
     private BattleShipGame gameEngine;
     private PartnerSession session;
+    private Button [][] buttons;
     private boolean waitingForOpponentMove;
 
 }

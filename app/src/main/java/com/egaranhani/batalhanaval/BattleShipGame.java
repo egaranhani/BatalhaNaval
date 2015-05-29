@@ -35,6 +35,10 @@ public class BattleShipGame {
         return myBoard;
     }
 
+    public int boardSize(){
+        return Board.BOARD_SIZE;
+    }
+
     public Board opponentBoard(){
         return oponentBoard;
     }
