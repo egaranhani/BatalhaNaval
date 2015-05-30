@@ -1,9 +1,8 @@
 package com.egaranhani.batalhanaval;
 
 import android.graphics.Color;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.AttributeSet;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,22 +19,23 @@ public class BattleShipActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         gameEngine = new BattleShipGame();
 
-        int length = gameEngine.boardSize();
-        buttons = new Button[length][length];
+        boardSize = gameEngine.boardSize();
+        buttons = new Button[boardSize][boardSize];
 
         setContentView(R.layout.activity_battle_ship);
         GridLayout layout = (GridLayout)findViewById(R.id.gridLayout);
 
-        int id = 0;
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < length; j++) {
+        for (int i = 0; i < boardSize; i++) {
+            for (int j = 0; j < boardSize; j++) {
+                int id = i*boardSize + j;
+
                 final Button b = new Button(this);
-                b.setId(id++);
+                b.setId(id);
                 b.setText("");
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        this.onClick(b);
+                        onButtonClick(b);
                     }
                 });
 
@@ -106,13 +106,14 @@ public class BattleShipActivity extends ActionBarActivity {
         //TODO: redraw opponent board
     }
 
-    protected void onClick(View v){
+    protected void onButtonClick(View v){
         int buttonId = v.getId();
     }
 
     private BattleShipGame gameEngine;
     private PartnerSession session;
     private Button [][] buttons;
+    private int boardSize;
     private boolean waitingForOpponentMove;
 
 }
