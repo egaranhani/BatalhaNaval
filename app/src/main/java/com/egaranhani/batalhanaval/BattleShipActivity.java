@@ -23,35 +23,52 @@ public class BattleShipActivity extends ActionBarActivity {
         buttons = new Button[boardSize][boardSize];
 
         setContentView(R.layout.activity_battle_ship);
-        GridLayout layout = (GridLayout)findViewById(R.id.gridLayout);
+        createBoardButtons();
+//        startSession();
+    }
+
+    private void createBoardButtons() {
+        GridLayout layout = (GridLayout)findViewById(R.id.mainLayout);
+        int layoutWidth = layout.getMeasuredWidth();
+        int layoutHeight = layout.getMeasuredHeight();
 
         for (int i = 0; i < boardSize; i++) {
             for (int j = 0; j < boardSize; j++) {
                 int id = i*boardSize + j;
-
-                final Button b = new Button(this);
-                b.setId(id);
-                b.setText("");
-                b.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onButtonClick(b);
-                    }
-                });
+                final Button b = createButton(id, i+2, j, layoutHeight/boardSize, layoutWidth/boardSize);
 
                 if(gameEngine.myBoard().board()[i][j].equals(BoardSpace.STATUS.BLANK))
                     b.setBackgroundColor(Color.WHITE);
                 else
                     b.setBackgroundColor(Color.BLUE);
+                layout.addView(b);
                 buttons[i][j] = b;
             }
         }
+    }
 
-        Button myButton = new Button(this);
-        myButton.setText("Push Me");
-
-        layout.addView(myButton);
-        startSession();
+    private Button createButton(int id, int row, int col, int buttonHeight, int buttonWidth) {
+        final Button b = new Button(this);
+        if(findViewById(id) != null)
+            throw new RuntimeException("ID " + String.valueOf(id) + " já existe");
+        b.setId(id);
+//        b.setText(" ");
+        b.setTextSize(8);
+        b.setText(String.valueOf(id));
+        GridLayout.Spec rowSpec = GridLayout.spec(row);
+        GridLayout.Spec colSpec = GridLayout.spec(col);
+        GridLayout.LayoutParams params = new GridLayout.LayoutParams(rowSpec, colSpec);
+        params.setMargins(1, 1, 1, 1);
+        params.height = 90;
+        params.width = 63;
+        b.setLayoutParams(params);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonClick(b);
+            }
+        });
+        return b;
     }
 
     @Override

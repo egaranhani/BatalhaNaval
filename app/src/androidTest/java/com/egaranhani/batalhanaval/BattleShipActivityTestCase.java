@@ -1,5 +1,7 @@
 package com.egaranhani.batalhanaval;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.ActivityTestCase;
 import android.widget.Button;
@@ -31,6 +33,8 @@ public class BattleShipActivityTestCase extends ActivityInstrumentationTestCase2
     public void testButtons(){
         for (Button b : buttons){
             assertEquals("", b.getText());
+//            ColorDrawable buttonColor = (ColorDrawable) b.getBackground();
+//            assertEquals(Color.WHITE, buttonColor.getColor());
         }
     }
 
