@@ -27,6 +27,10 @@ public class Board {
         return board[lin][col];
     }
 
+    public int getBoardSize(){
+        return BOARD_SIZE;
+    }
+
     public boolean putShip(BattleShip battleShip, int line, int column, DIRECTION direction){
         validateBoardPosition(line,column);
         int shipSize = battleShip.size();
